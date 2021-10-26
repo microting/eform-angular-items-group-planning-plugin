@@ -1,192 +1,333 @@
 import Page from '../Page';
+import { selectDateOnDatePicker } from '../../Helpers/helper-functions';
 
 export class ItemsGroupPlanningModalPage extends Page {
   constructor() {
     super();
   }
 
-  // Create page elements
-  public get createListItemName() {
-    $('#createListItemName').waitForDisplayed({timeout: 20000});
-    //$('#createListItemName').waitForClickable({timeout: 20000});
-    return $('#createListItemName');
-  }
-
-  public get createListSelector() {
-    $('#createListSelector input').waitForDisplayed({timeout: 20000});
-    $('#createListSelector input').waitForClickable({timeout: 20000});
-    return $('#createListSelector input');
-  }
-
-  public get createListSelectorOption() {
-    browser.pause(1000);
-    const ele = $(`//*[contains(@class, 'ng-option')]`);
-    ele.waitForDisplayed({timeout: 20000});
-    ele.waitForClickable({timeout: 20000});
+  // Create List
+  public async createListItemName() {
+    const ele = await $('#createListItemName');
+    await ele.waitForDisplayed({ timeout: 40000 });
     return ele;
   }
 
-  public get createListDescription() {
-    $('#createListDescription').waitForDisplayed({timeout: 20000});
-    $('#createListDescription').waitForClickable({timeout: 20000});
-    return $('#createListDescription');
+  public async createListSelector() {
+    const ele = await $('#createListSelector');
+    await ele.waitForDisplayed({ timeout: 40000 });
+    await ele.waitForClickable({ timeout: 40000 });
+    return ele;
   }
 
-  public get createRepeatEvery() {
-    $('#createRepeatEvery').waitForDisplayed({timeout: 20000});
-    //$('#createRepeatEvery').waitForClickable({timeout: 20000});
-    return $('#createRepeatEvery');
+  public async createListDescription() {
+    const ele = await $('#createListDescription');
+    await ele.waitForDisplayed({ timeout: 40000 });
+    await ele.waitForClickable({ timeout: 40000 });
+    return ele;
   }
 
-  public selectCreateRepeatType(n: number) {
-    $('#createRepeatType').click();
-    $('#spinner-animation').waitForDisplayed({timeout: 90000, reverse: true});
-    const choices = $$('#createRepeatType .ng-option');
-    choices[n].click();
-    $('#spinner-animation').waitForDisplayed({timeout: 90000, reverse: true});
+  public async createRepeatEvery() {
+    const ele = await $('#createRepeatEvery');
+    await ele.waitForDisplayed({ timeout: 40000 });
+    // ele.waitForClickable({ timeout: 40000 });
+    return ele;
   }
 
-  public get createRepeatUntil() {
-    $('#createRepeatUntil').waitForDisplayed({timeout: 20000});
-    //$('#createRepeatUntil').waitForClickable({timeout: 20000});
-    return $('#createRepeatUntil');
+  public async createRepeatType() {
+    const ele = await $('#createRepeatType');
+    await ele.waitForDisplayed({ timeout: 40000 });
+    return ele;
   }
 
-  public get listCreateSaveBtn() {
-    $('#listCreateSaveBtn').waitForDisplayed({timeout: 20000});
-    $('#listCreateSaveBtn').waitForClickable({timeout: 20000});
-    return $('#listCreateSaveBtn');
+  public async createDayOfWeek() {
+    const ele = await $('#createDayOfWeek');
+    await ele.waitForDisplayed({ timeout: 40000 });
+    return ele;
   }
 
-  public get listCreateCancelBtn() {
-    $('#listCreateCancelBtn').waitForDisplayed({timeout: 20000});
-    $('#listCreateCancelBtn').waitForClickable({timeout: 20000});
-    return $('#listCreateCancelBtn');
+  public async createDayOfMonth() {
+    const ele = await $('#createDayOfMonth');
+    await ele.waitForDisplayed({ timeout: 40000 });
+    return ele;
+  }
+
+  public async createRepeatUntil() {
+    const ele = await $('#createRepeatUntil');
+    await ele.waitForDisplayed({ timeout: 40000 });
+    // ele.waitForClickable({ timeout: 40000 });
+    return ele;
+  }
+
+  public async listCreateSaveBtn() {
+    const ele = await $('#listCreateSaveBtn');
+    await ele.waitForDisplayed({ timeout: 40000 });
+    await ele.waitForClickable({ timeout: 40000 });
+    return ele;
+  }
+
+  public async listCreateCancelBtn() {
+    const ele = await $('#listCreateCancelBtn');
+    await ele.waitForDisplayed({ timeout: 40000 });
+    await ele.waitForClickable({ timeout: 40000 });
+    return ele;
   }
 
   // Edit page elements
-  public get editListItemName() {
-    $('#editListItemName').waitForDisplayed({timeout: 20000});
-    $('#editListItemName').waitForClickable({timeout: 20000});
-    return $('#editListItemName');
+  public async editListItemName() {
+    const ele = await $('#editListItemName');
+    await ele.waitForDisplayed({ timeout: 40000 });
+    await ele.waitForClickable({ timeout: 40000 });
+    return ele;
   }
 
-  public get editListSelector() {
-    $('#editListSelector input').waitForDisplayed({timeout: 20000});
-    $('#editListSelector input').waitForClickable({timeout: 20000});
-    return $('#editListSelector input');
-  }
-  public get editListSelectorValue() {
-    return $(`//*[contains(@id, 'editListSelector')]//*[contains(@class, 'ng-value')]//div[contains(@class, 'ng-star-inserted')]`);
-  }
-  public get editListDescription() {
-    $('#editListDescription').waitForDisplayed({timeout: 20000});
-    $('#editListDescription').waitForClickable({timeout: 20000});
-    return $('#editListDescription');
+  public async editListSelector() {
+    const ele = await $('#editListSelector input');
+    await ele.waitForDisplayed({ timeout: 40000 });
+    await ele.waitForClickable({ timeout: 40000 });
+    return ele;
   }
 
-  public get editRepeatEvery() {
-    $('#editRepeatEvery').waitForDisplayed({timeout: 20000});
-    $('#editRepeatEvery').waitForClickable({timeout: 20000});
-    return $('#editRepeatEvery');
+  public async editListSelectorValue() {
+    return $(`#editListSelector .ng-value div.ng-star-inserted`);
   }
 
-  public selectEditRepeatType(n: number) {
-    $('#editRepeatType').click();
-    $('#spinner-animation').waitForDisplayed({timeout: 90000, reverse: true});
-    const choices = $$('#editRepeatType .ng-option');
-    choices[n].click();
-    $('#spinner-animation').waitForDisplayed({timeout: 90000, reverse: true});
+  public async editListDescription() {
+    const ele = await $('#editListDescription');
+    await ele.waitForDisplayed({ timeout: 40000 });
+    await ele.waitForClickable({ timeout: 40000 });
+    return ele;
   }
 
-  public get editRepeatUntil() {
-    $('#editRepeatUntil').waitForDisplayed({timeout: 20000});
-    $('#editRepeatUntil').waitForClickable({timeout: 20000});
-    return $('#editRepeatUntil');
+  public async editRepeatEvery() {
+    const ele = await $('#editRepeatEvery');
+    await ele.waitForDisplayed({ timeout: 40000 });
+    await ele.waitForClickable({ timeout: 40000 });
+    return ele;
   }
 
-  public get listEditSaveBtn() {
-    $('#listEditSaveBtn').waitForDisplayed({timeout: 20000});
-    $('#listEditSaveBtn').waitForClickable({timeout: 20000});
-    return $('#listEditSaveBtn');
+  public async editRepeatType() {
+    const ele = await $('#editRepeatType');
+    await ele.waitForDisplayed({ timeout: 40000 });
+    return ele;
   }
 
-  public get listEditCancelBtn() {
-    $('#listEditCancelBtn').waitForDisplayed({timeout: 20000});
-    $('#listEditCancelBtn').waitForClickable({timeout: 20000});
-    return $('#listEditCancelBtn');
+  public async editRepeatUntil() {
+    const ele = await $('#editRepeatUntil');
+    await ele.waitForDisplayed({ timeout: 40000 });
+    await ele.waitForClickable({ timeout: 40000 });
+    return ele;
+  }
+
+  public async listEditSaveBtn() {
+    const ele = await $('#listEditSaveBtn');
+    await ele.waitForDisplayed({ timeout: 40000 });
+    await ele.waitForClickable({ timeout: 40000 });
+    return ele;
+  }
+
+  public async listEditCancelBtn() {
+    const ele = await $('#listEditCancelBtn');
+    await ele.waitForDisplayed({ timeout: 40000 });
+    await ele.waitForClickable({ timeout: 40000 });
+    return ele;
   }
 
   // Add item elements
-  public get addItemBtn() {
-    $('#addItemBtn').waitForDisplayed({timeout: 20000});
-    $('#addItemBtn').waitForClickable({timeout: 20000});
-    return $('#addItemBtn');
+  public async addItemBtn() {
+    const ele = await $('#addItemBtn');
+    await ele.waitForDisplayed({ timeout: 40000 });
+    await ele.waitForClickable({ timeout: 40000 });
+    return ele;
   }
 
   // Delete page elements
-  public get listDeleteDeleteBtn() {
-    $('#listDeleteDeleteBtn').waitForDisplayed({timeout: 20000});
-    $('#listDeleteDeleteBtn').waitForClickable({timeout: 20000});
-    return $('#listDeleteDeleteBtn');
+  public async listDeleteDeleteBtn() {
+    const ele = await $('#listDeleteDeleteBtn');
+    await ele.waitForDisplayed({ timeout: 40000 });
+    await ele.waitForClickable({ timeout: 40000 });
+    return ele;
   }
 
-  public get listDeleteCancelBtn() {
-    $('#listDeleteCancelBtn').waitForDisplayed({timeout: 20000});
-    $('#listDeleteCancelBtn').waitForClickable({timeout: 20000});
-    return $('#listDeleteCancelBtn');
+  public async listDeleteCancelBtn() {
+    const ele = await $('#listDeleteCancelBtn');
+    await ele.waitForDisplayed({ timeout: 40000 });
+    await ele.waitForClickable({ timeout: 40000 });
+    return ele;
   }
 
-  public createList(data: any) {
-    this.createListItemName.setValue(data.name);
-    this.createListSelector.addValue(data.template);
-    this.createListSelectorOption.click();
-    this.createListDescription.setValue(data.description);
-    this.createRepeatEvery.setValue(data.repeatEvery);
-    this.selectCreateRepeatType(data.repeatType);
-    this.createRepeatUntil.setValue(data.repeatUntil);
-    this.listCreateSaveBtn.click();
-    $('#spinner-animation').waitForDisplayed({timeout: 90000, reverse: true});
+  public async createList(data: ListObject) {
+    const spinnerAnimation = await $('#spinner-animation');
+    if (data.name) {
+      await (await this.createListItemName()).setValue(data.name);
+    }
+    if (data.template) {
+      await (await (await this.createListSelector()).$('input')).setValue(
+        data.template
+      );
+      const option = await $(`ng-dropdown-panel .ng-option`);
+      await option.waitForDisplayed({ timeout: 10000 });
+      await option.waitForClickable({ timeout: 10000 });
+      await option.click();
+      await spinnerAnimation.waitForDisplayed({
+        timeout: 90000,
+        reverse: true,
+      });
+    }
+    if (data.description) {
+      await (await this.createListDescription()).setValue(data.description);
+    }
+    if (data.repeatEvery) {
+      await (await this.createRepeatEvery()).setValue(data.repeatEvery);
+    }
+    if (data.repeatType) {
+      await spinnerAnimation.waitForDisplayed({
+        timeout: 90000,
+        reverse: true,
+      });
+      await (await (await this.createRepeatType()).$('input')).setValue(
+        data.repeatType
+      );
+      const option = await $(`ng-dropdown-panel .ng-option`);
+      await option.waitForDisplayed({ timeout: 10000 });
+      await option.waitForClickable({ timeout: 10000 });
+      await option.click();
+      await spinnerAnimation.waitForDisplayed({
+        timeout: 90000,
+        reverse: true,
+      });
+    }
+    if (data.repeatUntil) {
+      await (await this.createRepeatUntil()).click();
+      await selectDateOnDatePicker(
+        data.repeatUntil.year,
+        data.repeatUntil.month,
+        data.repeatUntil.day
+      );
+    }
+    await (await this.listCreateSaveBtn()).click();
+    await spinnerAnimation.waitForDisplayed({ timeout: 90000, reverse: true });
   }
 
-  public editList(data: any) {
-    this.editListItemName.setValue(data.name);
-    this.editListSelector.setValue(data.template);
-    this.editListDescription.setValue(data.description);
-    this.editRepeatEvery.setValue(data.repeatEvery);
-    this.selectEditRepeatType(data.repeatType);
-    this.editRepeatUntil.setValue(data.repeatUntil);
-    this.listEditSaveBtn.click();
-    $('#spinner-animation').waitForDisplayed({timeout: 90000, reverse: true});
+  public async editList(data: ListObject) {
+    await (await this.editListItemName()).setValue(data.name);
+    await (await (await this.editListSelector()).$('input')).setValue(
+      data.template
+    );
+    let option = await $(`ng-dropdown-panel .ng-option=${data.template}`);
+    await option.waitForDisplayed({ timeout: 10000 });
+    await option.waitForClickable({ timeout: 10000 });
+    await option.click();
+    await (await this.editListDescription()).setValue(data.description);
+    await (await this.editRepeatEvery()).setValue(data.repeatEvery);
+    await (await (await this.editRepeatType()).$('input')).setValue(
+      data.repeatType
+    );
+    option = await $(`ng-dropdown-panel .ng-option=${data.repeatType}`);
+    await option.waitForDisplayed({ timeout: 10000 });
+    await option.waitForClickable({ timeout: 10000 });
+    await option.click();
+
+    // this.selectEditRepeatType(data.repeatType);
+    await (await this.editRepeatUntil()).click();
+    await selectDateOnDatePicker(
+      data.repeatUntil.year,
+      data.repeatUntil.month,
+      data.repeatUntil.day
+    );
+    await (await this.listEditSaveBtn()).click();
+    await $('#spinner-animation').waitForDisplayed({
+      timeout: 90000,
+      reverse: true,
+    });
   }
 
-  public addNewItem() {
-    this.addItemBtn.click();
-    $('#spinner-animation').waitForDisplayed({timeout: 90000, reverse: true});
+  public async addNewItem() {
+    await (await this.addItemBtn()).click();
   }
-
 }
 
 const itemsPlanningModalPage = new ItemsGroupPlanningModalPage();
 export default itemsPlanningModalPage;
 
 export class ListItemRowObject {
-  constructor(rowNumber) {
-    this.name = $$('#createItemName')[rowNumber - 1].getText();
-    this.description = $$('#createItemDescription')[rowNumber - 1].getText();
-    this.number = $$('#createItemNumber')[rowNumber - 1].getText();
-    this.locationCode = $$('#createItemLocationCode')[rowNumber - 1].getText();
-    this.deleteBtn = $$('#deleteItemBtn')[rowNumber - 1];
+  constructor() {}
+
+  public element: WebdriverIO.Element;
+  public number: string;
+  public name: string;
+  public description: string;
+  public locationCode: string;
+  public buildYear: string;
+  public type: string;
+  public deleteBtn: WebdriverIO.Element;
+
+  async getRow(rowNum: number) {
+    this.element = (await $$('app-items-group-planning-pn-add-items'))[
+      rowNum - 1
+    ];
+    if (this.element) {
+      this.number = await (await this.element.$('#itemNumber')).getText();
+      this.name = await (await this.element.$('#itemName')).getText();
+      this.description = await (
+        await this.element.$('#itemDescription')
+      ).getText();
+      this.locationCode = await (
+        await this.element.$('#itemLocationCode')
+      ).getText();
+      this.buildYear = await (await this.element.$('#itemBuildYear')).getText();
+      this.type = await (await this.element.$('#itemType')).getText();
+      this.deleteBtn = await this.element.$('#deleteItemBtn');
+    }
+    return this;
   }
 
-  public name;
-  public description;
-  public number;
-  public locationCode;
-  public deleteBtn;
-
-  public deleteItem() {
-    this.deleteBtn.click();
-    $('#spinner-animation').waitForDisplayed({timeout: 90000, reverse: true});
+  public async deleteItem() {
+    await this.deleteBtn.click();
   }
+
+  public async editItem(item?: ListItemObject) {
+    if (item) {
+      if (item.number && this.number !== item.number) {
+        await (await this.element.$('#itemNumber')).setValue(item.number);
+      }
+      if (item.name && this.name !== item.name) {
+        await (await this.element.$('#itemName')).setValue(item.name);
+      }
+      if (item.description && this.description !== item.description) {
+        await (await this.element.$('#itemDescription')).setValue(
+          item.description
+        );
+      }
+      if (item.locationCode && this.locationCode !== item.locationCode) {
+        await (await this.element.$('#itemLocationCode')).setValue(
+          item.locationCode
+        );
+      }
+      if (item.buildYear && this.buildYear !== item.buildYear) {
+        await (await this.element.$('#itemBuildYear')).setValue(item.buildYear);
+      }
+      if (item.type && this.type !== item.type) {
+        await (await this.element.$('#itemType')).setValue(item.type);
+      }
+    }
+  }
+}
+
+export class ListItemObject {
+  public name?: string;
+  public description?: string;
+  public number?: string;
+  public locationCode?: string;
+  public buildYear?: string;
+  public type?: string;
+}
+
+export class ListObject {
+  name?: string;
+  template?: string;
+  description?: string;
+  repeatEvery?: string;
+  repeatType?: string;
+  repeatUntil?: { month: number; day: number; year: number };
 }

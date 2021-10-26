@@ -31,6 +31,7 @@ export class ItemListStateService {
     return this.service
       .getAllLists({
         ...this.query.pageSetting.pagination,
+        ...this.query.pageSetting.filters,
       })
       .pipe(
         map((response) => {
@@ -44,18 +45,18 @@ export class ItemListStateService {
       );
   }
 
-  // updateNameFilter(nameFilter: string) {
-  //   this.store.update((state) => ({
-  //     filters: {
-  //       ...state.filters,
-  //       nameFilter: nameFilter,
-  //     },
-  //     pagination: {
-  //       ...state.pagination,
-  //       offset: 0,
-  //     },
-  //   }));
-  // }
+  updateNameFilter(nameFilter: string) {
+    this.store.update((state) => ({
+      filters: {
+        ...state.filters,
+        nameFilter: nameFilter,
+      },
+      pagination: {
+        ...state.pagination,
+        offset: 0,
+      },
+    }));
+  }
 
   updatePageSize(pageSize: number) {
     this.store.update((state) => ({

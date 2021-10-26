@@ -18,7 +18,11 @@ import {
   ItemsGroupPlanningPnUploadedDataService,
 } from './services';
 import { FileUploadModule } from 'ng2-file-upload';
-import { OwlDateTimeModule } from '@danielmoncada/angular-datetime-picker';
+import {
+  OWL_DATE_TIME_FORMATS,
+  OwlDateTimeModule,
+  OwlMomentDateTimeModule,
+} from '@danielmoncada/angular-datetime-picker';
 import {
   ItemCaseUploadedDataComponent,
   ItemListCaseColumnsModalComponent,
@@ -37,6 +41,7 @@ import {
   UploadedDataPdfComponent,
 } from './components';
 import { itemsGroupPlanningStoreProviders } from './store-providers.config';
+import { MY_MOMENT_FORMATS_FOR_ITEMS_GROUP_PLANNING } from './consts/custom-date-time-adapter';
 
 @NgModule({
   imports: [
@@ -53,6 +58,7 @@ import { itemsGroupPlanningStoreProviders } from './store-providers.config';
     ReactiveFormsModule,
     FileUploadModule,
     OwlDateTimeModule,
+    OwlMomentDateTimeModule,
   ],
   declarations: [
     ItemsGroupPlanningPnLayoutComponent,
@@ -78,6 +84,10 @@ import { itemsGroupPlanningStoreProviders } from './store-providers.config';
     ItemsGroupPlanningPnReportsService,
     ItemsGroupPlanningPnCasesService,
     ItemsGroupPlanningPnUploadedDataService,
+    {
+      provide: OWL_DATE_TIME_FORMATS,
+      useValue: MY_MOMENT_FORMATS_FOR_ITEMS_GROUP_PLANNING,
+    },
     ...itemsGroupPlanningStoreProviders,
   ],
 })

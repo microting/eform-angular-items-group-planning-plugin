@@ -1,5 +1,4 @@
-import {ItemsListPnItemModel} from './items-list-pn-item.model';
-import {Moment} from 'moment';
+import { ItemsListPnItemModel } from './items-list-pn-item.model';
 
 export class ItemsListPnCreateModel {
   name: string;
@@ -9,7 +8,7 @@ export class ItemsListPnCreateModel {
   dayOfWeek: number;
   dayOfMonth: number;
   repeatUntil: string;
-  internalRepeatUntil: Moment | null;
+  internalRepeatUntil: string;
   relatedEFormId: number;
   items: ItemsListPnItemModel[] = [];
 }
