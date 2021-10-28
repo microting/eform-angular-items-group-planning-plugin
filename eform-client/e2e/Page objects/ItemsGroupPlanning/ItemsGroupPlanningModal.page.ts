@@ -82,14 +82,10 @@ export class ItemsGroupPlanningModalPage extends Page {
   }
 
   public async editListSelector() {
-    const ele = await $('#editListSelector input');
+    const ele = await $('#editListSelector');
     await ele.waitForDisplayed({ timeout: 40000 });
-    await ele.waitForClickable({ timeout: 40000 });
+    // await ele.waitForClickable({ timeout: 40000 });
     return ele;
-  }
-
-  public async editListSelectorValue() {
-    return $(`#editListSelector .ng-value div.ng-star-inserted`);
   }
 
   public async editListDescription() {
@@ -168,6 +164,7 @@ export class ItemsGroupPlanningModalPage extends Page {
       const option = await $(`ng-dropdown-panel .ng-option`);
       await option.waitForDisplayed({ timeout: 10000 });
       await option.waitForClickable({ timeout: 10000 });
+      await browser.pause(5000);
       await option.click();
       await spinnerAnimation.waitForDisplayed({
         timeout: 90000,
@@ -191,6 +188,7 @@ export class ItemsGroupPlanningModalPage extends Page {
       const option = await $(`ng-dropdown-panel .ng-option`);
       await option.waitForDisplayed({ timeout: 10000 });
       await option.waitForClickable({ timeout: 10000 });
+      await browser.pause(5000);
       await option.click();
       await spinnerAnimation.waitForDisplayed({
         timeout: 90000,
@@ -207,39 +205,6 @@ export class ItemsGroupPlanningModalPage extends Page {
     }
     await (await this.listCreateSaveBtn()).click();
     await spinnerAnimation.waitForDisplayed({ timeout: 90000, reverse: true });
-  }
-
-  public async editList(data: ListObject) {
-    await (await this.editListItemName()).setValue(data.name);
-    await (await (await this.editListSelector()).$('input')).setValue(
-      data.template
-    );
-    let option = await $(`ng-dropdown-panel .ng-option=${data.template}`);
-    await option.waitForDisplayed({ timeout: 10000 });
-    await option.waitForClickable({ timeout: 10000 });
-    await option.click();
-    await (await this.editListDescription()).setValue(data.description);
-    await (await this.editRepeatEvery()).setValue(data.repeatEvery);
-    await (await (await this.editRepeatType()).$('input')).setValue(
-      data.repeatType
-    );
-    option = await $(`ng-dropdown-panel .ng-option=${data.repeatType}`);
-    await option.waitForDisplayed({ timeout: 10000 });
-    await option.waitForClickable({ timeout: 10000 });
-    await option.click();
-
-    // this.selectEditRepeatType(data.repeatType);
-    await (await this.editRepeatUntil()).click();
-    await selectDateOnDatePicker(
-      data.repeatUntil.year,
-      data.repeatUntil.month,
-      data.repeatUntil.day
-    );
-    await (await this.listEditSaveBtn()).click();
-    await $('#spinner-animation').waitForDisplayed({
-      timeout: 90000,
-      reverse: true,
-    });
   }
 
   public async addNewItem() {

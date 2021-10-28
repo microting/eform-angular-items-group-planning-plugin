@@ -32,9 +32,7 @@ describe('Items group planning actions', function () {
     };
     await itemsGroupPlanningModalPage.createList(listData);
     // Check that list is created in table
-    const listRowObject = await new ListRowObject().getRow(
-      await itemsGroupPlanningListPage.rowNum()
-    );
+    const listRowObject = await itemsGroupPlanningListPage.getLastListRowObject();
     expect(listRowObject.name, 'Name in table is incorrect').equal(
       listData.name
     );
@@ -42,47 +40,24 @@ describe('Items group planning actions', function () {
       listRowObject.description,
       'Description in table is incorrect'
     ).equal(listData.description);
-    // Check that all list fields are saved
-    await listRowObject.clickUpdateList();
-    expect(
-      await (await itemsGroupPlanningModalPage.editListItemName()).getValue(),
-      'Saved Name is incorrect'
-    ).equal(listData.name);
-    expect(
-      await (
-        await itemsGroupPlanningModalPage.editListSelectorValue()
-      ).getText(),
-      'Saved Template is incorrect'
-    ).equal(listData.template);
-    expect(
-      await (
-        await itemsGroupPlanningModalPage.editListDescription()
-      ).getValue(),
-      'Saved Description is incorrect'
-    ).equal(listData.description);
-    expect(
-      await (await itemsGroupPlanningModalPage.editRepeatEvery()).getValue(),
-      'Saved Repeat Every is incorrect'
-    ).equal(listData.repeatEvery);
-    const repeatUntilSaved = new Date(
-      await (await itemsGroupPlanningModalPage.editRepeatUntil()).getValue()
+    expect(listRowObject.repeatEvery, 'Saved Repeat Every is incorrect').equal(
+      listData.repeatEvery
     );
-    expect(repeatUntilSaved.getDate(), 'Saved Repeat Until is incorrect').equal(
-      listData.repeatUntil.day
+    expect(listRowObject.repeatUntil, 'Saved Repeat Until is incorrect').equal(
+      `${listData.repeatUntil.day}.0${listData.repeatUntil.month}.${listData.repeatUntil.year}`
     );
-    await $('#editRepeatType').click();
-    await spinnerAnimation.waitForDisplayed({ timeout: 90000, reverse: true });
-    const editRepeatTypeSelected = (await $$('#editRepeatType .ng-option'))[
+    expect(listRowObject.repeatType, 'Saved Repeat Type is incorrect').eq(
       listData.repeatType
-    ];
-    expect(
-      editRepeatTypeSelected.getAttribute('class'),
-      'Saved Repeat Type is incorrect'
-    ).contains('ng-option-selected');
-    await (await itemsGroupPlanningModalPage.listEditCancelBtn()).click();
-    await spinnerAnimation.waitForDisplayed({ timeout: 90000, reverse: true });
-    await listRowObject.clickDeleteList();
-    await (await itemsGroupPlanningModalPage.listDeleteDeleteBtn()).click();
-    await spinnerAnimation.waitForDisplayed({ timeout: 90000, reverse: true });
+    );
+    // Check that all list fields are saved
+    await listRowObject.openEditModal();
+    const value = await (
+      await itemsGroupPlanningModalPage.editListSelector()
+    ).$('.ng-value');
+    expect(await value.getText(), 'Saved Template is incorrect').eq(
+      listData.template
+    );
+    await listRowObject.closeEditModal(true);
+    await listRowObject.delete();
   });
 });

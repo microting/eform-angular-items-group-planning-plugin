@@ -1,7 +1,5 @@
 import loginPage from '../../Page objects/Login.page';
-import itemsGroupPlanningListPage, {
-  ListRowObject,
-} from '../../Page objects/ItemsGroupPlanning/ItemsGroupPlanningList.page';
+import itemsGroupPlanningListPage from '../../Page objects/ItemsGroupPlanning/ItemsGroupPlanningList.page';
 import itemsGroupPlanningModalPage from '../../Page objects/ItemsGroupPlanning/ItemsGroupPlanningModal.page';
 
 const expect = require('chai').expect;
@@ -28,15 +26,11 @@ describe('Items group planning actions', function () {
     await spinnerAnimation.waitForDisplayed({ timeout: 90000, reverse: true });
   });
   it('should delete existing list', async () => {
-    const spinnerAnimation = await $('#spinner-animation');
-    spinnerAnimation.waitForDisplayed({ timeout: 90000, reverse: true });
-    let listRowObject = await new ListRowObject().getRow(
+    const countBeforeDelete = await itemsGroupPlanningListPage.rowNum();
+    const listRowObject = await itemsGroupPlanningListPage.getLastListRowObject();
+    await listRowObject.delete();
+    expect(countBeforeDelete - 1, 'List is not deleted').eq(
       await itemsGroupPlanningListPage.rowNum()
     );
-    await listRowObject.clickDeleteList();
-    await (await itemsGroupPlanningModalPage.listDeleteDeleteBtn()).click();
-    spinnerAnimation.waitForDisplayed({ timeout: 90000, reverse: true });
-    listRowObject = await new ListRowObject().getRow(1);
-    expect(listRowObject.id === null, 'List is not deleted');
   });
 });
