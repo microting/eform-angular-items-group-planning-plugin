@@ -15,7 +15,7 @@ exports.config = {
         'e2e/Tests/items-group-planning-general/items-group-planning.add.spec.ts',
         'e2e/Tests/items-group-planning-general/items-group-planning.edit.spec.ts',
         'e2e/Tests/items-group-planning-general/items-group-planning.delete.spec.ts',
-        'e2e/Tests/items-group-planning-general/items-group-planning.settings.spec.ts',
+        //'e2e/Tests/items-group-planning-general/items-group-planning.settings.spec.ts',
         'e2e/Tests/items-group-planning-general/items-group-planning.sorting.spec.ts'
     ],
     suites: {
