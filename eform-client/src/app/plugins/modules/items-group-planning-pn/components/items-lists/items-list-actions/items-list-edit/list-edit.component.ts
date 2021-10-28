@@ -13,11 +13,11 @@ import {
   ItemsListPnUpdateModel,
 } from '../../../../models/list';
 import { debounceTime, switchMap } from 'rxjs/operators';
-import * as moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { EFormService } from 'src/app/common/services';
 import { TemplateListModel, TemplateRequestModel } from 'src/app/common/models';
+import { format, set } from 'date-fns';
 
 @Component({
   selector: 'app-items-group-planning-pn-list-edit',
@@ -87,15 +87,6 @@ export class ListEditComponent implements OnInit {
   }
 
   updateList() {
-    if (this.selectedListModel.internalRepeatUntil) {
-      const tempDate = moment(
-        this.selectedListModel.internalRepeatUntil
-      ).format('DD/MM/YYYY');
-      const datTime = moment.utc(tempDate, 'DD/MM/YYYY');
-      this.selectedListModel.repeatUntil = datTime
-        .format('YYYY-MM-DDT00:00:00')
-        .toString();
-    }
     const model = new ItemsListPnUpdateModel(this.selectedListModel);
     this.itemsGroupPlanningPnListsService
       .updateList(model)
@@ -130,6 +121,20 @@ export class ListEditComponent implements OnInit {
   removeItem(id: number) {
     this.selectedListModel.items = this.selectedListModel.items.filter(
       (x) => x.id !== id
+    );
+  }
+
+  updateRepeatUntil(e: any) {
+    let date = new Date(e);
+    date = set(date, {
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+      milliseconds: 0,
+    });
+    this.selectedListModel.repeatUntil = format(
+      date,
+      `yyyy-MM-dd'T'HH:mm:ss.SSS'Z'`
     );
   }
 }

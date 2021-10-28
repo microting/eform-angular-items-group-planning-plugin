@@ -7,6 +7,7 @@ import {
 
 export interface ItemListState {
   pagination: CommonPaginationState;
+  filters: FiltrationStateModel;
   total: number;
 }
 
@@ -18,6 +19,9 @@ function createInitialState(): ItemListState {
       isSortDsc: false,
       offset: 0,
     },
+    filters: {
+      nameFilter: '',
+    },
     total: 0,
   };
 }
@@ -28,6 +32,7 @@ const itemListPersistStorage = persistState({
   preStorageUpdate(storeName, state: ItemListState) {
     return {
       pagination: state.pagination,
+      filtration: state.filters,
     };
   },
 });

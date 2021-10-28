@@ -12,17 +12,10 @@ import {
   ItemsListPnCreateModel,
   ItemsListPnItemModel,
 } from '../../../../models';
-import {
-  TemplateListModel,
-  TemplateRequestModel,
-} from 'src/app/common/models/eforms';
-import moment = require('moment');
+import { TemplateListModel, TemplateRequestModel } from 'src/app/common/models';
 import { Location } from '@angular/common';
-import {
-  AuthService,
-  EFormService,
-  SitesService,
-} from 'src/app/common/services';
+import { AuthService, EFormService } from 'src/app/common/services';
+import { format, set } from 'date-fns';
 
 @Component({
   selector: 'app-items-group-planning-pn-items-list-create',
@@ -43,7 +36,6 @@ export class ItemsListCreateComponent implements OnInit {
   }
   constructor(
     private itemsGroupPlanningPnListsService: ItemsGroupPlanningPnListsService,
-    private sitesService: SitesService,
     private authService: AuthService,
     private eFormService: EFormService,
     private cd: ChangeDetectorRef,
@@ -72,14 +64,6 @@ export class ItemsListCreateComponent implements OnInit {
   }
 
   createItemsList() {
-    if (this.newListModel.internalRepeatUntil) {
-      const tempDate = moment(this.newListModel.internalRepeatUntil).format(
-        'DD/MM/YYYY'
-      );
-      const datTime = moment.utc(tempDate, 'DD/MM/YYYY');
-      this.newListModel.repeatUntil = datTime.format('YYYY-MM-DD');
-    }
-
     this.itemsGroupPlanningPnListsService
       .createList(this.newListModel)
       .subscribe((data) => {
@@ -114,6 +98,20 @@ export class ItemsListCreateComponent implements OnInit {
   removeItem(id: number) {
     this.newListModel.items = this.newListModel.items.filter(
       (x) => x.id !== id
+    );
+  }
+
+  updateRepeatUntil(e: any) {
+    let date = new Date(e);
+    date = set(date, {
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+      milliseconds: 0,
+    });
+    this.newListModel.repeatUntil = format(
+      date,
+      `yyyy-MM-dd'T'HH:mm:ss.SSS'Z'`
     );
   }
 }

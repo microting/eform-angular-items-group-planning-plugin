@@ -24,16 +24,6 @@ import { DateTimeAdapter } from '@danielmoncada/angular-datetime-picker';
   styleUrls: ['./report-generator-form.component.scss'],
 })
 export class ReportGeneratorFormComponent implements OnInit {
-  @Output()
-  generateReport: EventEmitter<ReportPnGenerateModel> = new EventEmitter();
-  @Output()
-  saveReport: EventEmitter<ReportPnGenerateModel> = new EventEmitter();
-  generateForm: FormGroup;
-  typeahead = new EventEmitter<string>();
-  itemLists: ItemsListsPnModel = new ItemsListsPnModel();
-  items: Array<ItemsListPnItemModel> = [];
-  listRequestModel: ItemsListPnRequestModel = new ItemsListPnRequestModel();
-
   constructor(
     dateTimeAdapter: DateTimeAdapter<any>,
     private localeService: LocaleService,
@@ -55,6 +45,24 @@ export class ReportGeneratorFormComponent implements OnInit {
         this.cd.markForCheck();
       });
   }
+  @Output()
+  generateReport: EventEmitter<ReportPnGenerateModel> = new EventEmitter();
+  @Output()
+  saveReport: EventEmitter<ReportPnGenerateModel> = new EventEmitter();
+  generateForm: FormGroup;
+  typeahead = new EventEmitter<string>();
+  itemLists: ItemsListsPnModel = new ItemsListsPnModel();
+  items: Array<ItemsListPnItemModel> = [];
+  listRequestModel: ItemsListPnRequestModel = new ItemsListPnRequestModel();
+
+  private static extractData(formValue: any): ReportPnGenerateModel {
+    return new ReportPnGenerateModel({
+      itemList: formValue.itemList,
+      item: formValue.item,
+      dateFrom: format(formValue.dateRange[0]._d, 'yyyy-MM-dd'),
+      dateTo: format(formValue.dateRange[1]._d, 'yyyy-MM-dd'),
+    });
+  }
 
   ngOnInit() {
     this.generateForm = this.formBuilder.group({
@@ -65,12 +73,16 @@ export class ReportGeneratorFormComponent implements OnInit {
   }
 
   onSubmit() {
-    const model = this.extractData(this.generateForm.value);
+    const model = ReportGeneratorFormComponent.extractData(
+      this.generateForm.value
+    );
     this.generateReport.emit(model);
   }
 
   onSave() {
-    const model = this.extractData(this.generateForm.value);
+    const model = ReportGeneratorFormComponent.extractData(
+      this.generateForm.value
+    );
     this.saveReport.emit(model);
   }
 
@@ -78,15 +90,6 @@ export class ReportGeneratorFormComponent implements OnInit {
     this.listsService.getSingleList(e.id).subscribe((itemList) => {
       this.items = itemList.model.items;
       this.cd.markForCheck();
-    });
-  }
-
-  private extractData(formValue: any): ReportPnGenerateModel {
-    return new ReportPnGenerateModel({
-      itemList: formValue.itemList,
-      item: formValue.item,
-      dateFrom: format(formValue.dateRange[0], 'yyyy-MM-dd'),
-      dateTo: format(formValue.dateRange[1], 'yyyy-MM-dd'),
     });
   }
 }

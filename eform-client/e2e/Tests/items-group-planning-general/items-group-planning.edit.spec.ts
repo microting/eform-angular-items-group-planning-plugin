@@ -1,64 +1,74 @@
 import loginPage from '../../Page objects/Login.page';
-import itemsGroupPlanningListPage, {ListRowObject} from '../../Page objects/ItemsGroupPlanning/ItemsGroupPlanningList.page';
+import itemsGroupPlanningListPage, {
+  ListRowObject,
+} from '../../Page objects/ItemsGroupPlanning/ItemsGroupPlanningList.page';
 import itemsGroupPlanningModalPage from '../../Page objects/ItemsGroupPlanning/ItemsGroupPlanningModal.page';
 
 const expect = require('chai').expect;
 
 describe('Items group planning actions', function () {
-    before(function () {
-        loginPage.open('/auth');
-        loginPage.login();
-        itemsGroupPlanningListPage.goToListsPage();
-    });
-  it('should create a new list', function () {
-      itemsGroupPlanningListPage.listCreateBtn.click();
-      $('#spinner-animation').waitForDisplayed({timeout: 90000, reverse: true});
-      const listData = {
-        name: 'Test list',
-        template: 'Number 1',
-        description: 'Description',
-        repeatEvery: '1',
-        repeatType: '1',
-        repeatUntil: '5/15/2020'
-      };
-    itemsGroupPlanningModalPage.createList(listData);
+  before(async () => {
+    await loginPage.open('/auth');
+    await loginPage.login();
+    await itemsGroupPlanningListPage.goToListsPage();
   });
-  it ('should change all fields after edit', function () {
-        $('#spinner-animation').waitForDisplayed({timeout: 90000, reverse: true});
-        let listRowObject = new ListRowObject(itemsGroupPlanningListPage.rowNum());
-        listRowObject.clickUpdateList();
-        const listData = {
-            name: 'Test list 2',
-            template: '',
-            description: 'Description 2',
-            repeatEvery: '2',
-            repeatType: '1',
-            repeatUntil: '5/15/2023'
-        };
-        itemsGroupPlanningModalPage.editList(listData);
-        // Check that list is edited successfully in table
-        listRowObject = new ListRowObject(itemsGroupPlanningListPage.rowNum());
-        expect(listRowObject.name, 'Name in table is incorrect').equal(listData.name);
-        expect(listRowObject.description, 'Description in table is incorrect').equal(listData.description);
-        // Check that all list fields are saved
-        listRowObject.clickUpdateList();
-        expect(itemsGroupPlanningModalPage.editListItemName.getValue(), 'Saved Name is incorrect').equal(listData.name);
-        expect(itemsGroupPlanningModalPage.editListSelector.getValue(), 'Saved Template is incorrect').equal(listData.template);
-        expect(itemsGroupPlanningModalPage.editListDescription.getValue(), 'Saved Description is incorrect').equal(listData.description);
-        expect(itemsGroupPlanningModalPage.editRepeatEvery.getValue(), 'Saved Repeat Every is incorrect').equal(listData.repeatEvery);
-        const repeatUntil = new Date(listData.repeatUntil);
-        const repeatUntilSaved = new Date(itemsGroupPlanningModalPage.editRepeatUntil.getValue());
-        expect(repeatUntilSaved.getDate(), 'Saved Repeat Until is incorrect').equal(repeatUntil.getDate());
-
-        $('#editRepeatType').click();
-        $('#spinner-animation').waitForDisplayed({timeout: 90000, reverse: true});
-        const editRepeatTypeSelected = $$('#editRepeatType .ng-option')[listData.repeatType];
-        expect(editRepeatTypeSelected.getAttribute('class'), 'Saved Repeat Type is incorrect').contains('ng-option-selected');
-
-        itemsGroupPlanningModalPage.listEditCancelBtn.click();
-        $('#spinner-animation').waitForDisplayed({timeout: 90000, reverse: true});
-        listRowObject.clickDeleteList();
-        itemsGroupPlanningModalPage.listDeleteDeleteBtn.click();
-        $('#spinner-animation').waitForDisplayed({timeout: 90000, reverse: true});
+  it('should create a new list', async () => {
+    await (await itemsGroupPlanningListPage.listCreateBtn()).click();
+    await $('#spinner-animation').waitForDisplayed({
+      timeout: 90000,
+      reverse: true,
     });
+    const listData = {
+      name: 'Test list',
+      template: 'Number 1',
+      description: 'Description',
+      repeatEvery: '1',
+      repeatType: 'Dag',
+      repeatUntil: { month: 5, day: 15, year: 2020 },
+    };
+    await itemsGroupPlanningModalPage.createList(listData);
+  });
+  it('should change all fields after edit', async () => {
+    const spinnerAnimation = await $('#spinner-animation');
+    await spinnerAnimation.waitForDisplayed({
+      timeout: 90000,
+      reverse: true,
+    });
+    let listRowObject = await itemsGroupPlanningListPage.getLastListRowObject();
+    const listData = {
+      name: 'Test list 2',
+      description: 'Description 2',
+      repeatEvery: '2',
+      repeatType: 'Uge',
+      repeatUntil: { month: 5, day: 15, year: 2023 },
+    };
+    await listRowObject.edit(listData);
+    // Check that list is edited successfully in table
+    listRowObject = await itemsGroupPlanningListPage.getLastListRowObject();
+    expect(listRowObject.name, 'Name in table is incorrect').equal(
+      listData.name
+    );
+    expect(
+      listRowObject.description,
+      'Description in table is incorrect'
+    ).equal(listData.description);
+    expect(listRowObject.repeatEvery, 'Saved Repeat Every is incorrect').equal(
+      listData.repeatEvery
+    );
+    expect(listRowObject.repeatUntil, 'Saved Repeat Until is incorrect').equal(
+      `${listData.repeatUntil.day}.0${listData.repeatUntil.month}.${listData.repeatUntil.year}`
+    );
+    expect(listRowObject.repeatType, 'Saved Repeat Type is incorrect').eq(
+      listData.repeatType
+    );
+
+    // Check that all list fields are saved
+    await listRowObject.openEditModal();
+    const value = await (
+      await itemsGroupPlanningModalPage.editListSelector()
+    ).$('.ng-value');
+    expect(await value.getText(), 'Saved Template is incorrect').eq('Number 1');
+    await listRowObject.closeEditModal(true);
+    await listRowObject.delete();
+  });
 });
